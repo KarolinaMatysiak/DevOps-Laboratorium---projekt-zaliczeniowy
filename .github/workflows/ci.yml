@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x  # używamy net8.0 jak w projekcie testowym
+
+    - name: Restore dependencies
+      run: dotnet restore lab4/sample-app/backend/ProductApi.csproj
+
+    - name: Build project
+      run: dotnet build lab4/sample-app/backend/ProductApi.csproj --no-restore
+
+    - name: Run unit tests
+      run: dotnet test lab5/sample-ci/backend/ProductApi.Tests/ProductApiMinimalTests.csproj --no-build --verbosity normal
