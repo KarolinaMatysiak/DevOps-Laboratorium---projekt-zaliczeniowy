@@ -38,8 +38,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Endpoint "/"
+app.MapGet("/", () => "Hello DevOps")
+   .WithName("Root");
+
 // GET endpoint - Get all products
-app.MapGet("/api/products", async (AppDbContext db) =>
+app.MapGet("/products", async (AppDbContext db) =>
 {
     var products = await db.Products.OrderByDescending(p => p.Id).ToListAsync();
     return Results.Ok(products);
@@ -47,7 +51,7 @@ app.MapGet("/api/products", async (AppDbContext db) =>
 .WithName("GetProducts");
 
 // POST endpoint - Add new product
-app.MapPost("/api/products", async (Product product, AppDbContext db) =>
+app.MapPost("/products", async (Product product, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(product.Name))
     {
